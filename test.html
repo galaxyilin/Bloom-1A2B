@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ColorMatch 1A2B Game</title>
+  <style>
+    body { font-family: 'Comic Sans MS', cursive; background-color: #f0f8ff; text-align: center; }
+    .log { margin-top: 20px; font-size: 20px; color: darkblue; }
+    input { font-size: 20px; padding: 10px; }
+  </style>
+</head>
+<body>
+
+  <h1>🎨 ColorMatch 1A2B 🎯</h1>
+  <p>Guess the 4-digit number with no repeated digits</p>
+  <input id="guess" maxlength="4" placeholder="Enter 4 digits" />
+  <button onclick="checkGuess()">Guess</button>
+
+  <div class="log" id="history"></div>
+
+  <script>
+    let answer = generateAnswer();
+    let attempts = 0;
+
+    function generateAnswer() {
+      let digits = [...Array(10).keys()];
+      digits.sort(() => 0.5 - Math.random());
+      return digits.slice(0, 4).map(String);
+    }
+
+    function checkGuess() {
+      const input = document.getElementById("guess").value;
+      if (input.length !== 4 || new Set(input).size < 4 || isNaN(input)) {
+        alert("Please enter 4 different digits!");
+        return;
+      }
+
+      const guess = input.split('');
+      let A = 0, B = 0;
+      for (let i = 0; i < 4; i++) {
+        if (guess[i] === answer[i]) A++;
+        else if (answer.includes(guess[i])) B++;
+      }
+
+      attempts++;
+      const log = document.getElementById("history");
+      log.innerHTML += `<p>${input} → ${A}A${B}B</p>`;
+
+      if (A === 4) {
+        log.innerHTML += `<p style="color: green; font-weight: bold;">You Win in ${attempts} attempts! 🎉</p>`;
+        document.getElementById("guess").disabled = true;
+      } else if (attempts >= 20) {
+        log.innerHTML += `<p style="color: red;">Game Over! The correct answer was ${answer.join('')}</p>`;
+        document.getElementById("guess").disabled = true;
+      }
+    }
+  </script>
+
+</body>
+</html>
