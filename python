@@ -1,0 +1,68 @@
+from graphics import Canvas
+import random
+    
+CANVAS_WIDTH = 500
+CANVAS_HEIGHT = 400
+
+def main():
+    canvas = Canvas(CANVAS_WIDTH, CANVAS_HEIGHT)
+    canvas.create_rectangle(0,0,CANVAS_WIDTH,CANVAS_HEIGHT,'mistyrose') #create background
+    answer=generate_answer()
+    guess(canvas,answer)
+    return
+
+def guess(canvas,answer):
+    attempts=0
+    while attempts<=20: # only can print 20 history guessing 
+        user_input=input("Please enter your number: ").strip() # to remove other blanks
+        
+        if len(user_input) != 4 or not user_input.isdigit() or len(set(user_input)) != 4:
+        print("Please enter 4 unique digits (0-9). Try again.")
+            continue
+
+        user_guess=list(user_input)
+        A,B=check_answer(user_guess,answer)
+        print(f"{user_input} → {A}A{B}B")
+        print_history(canvas, attempts, user_input, A, B)
+        attempts+=1
+        if A==4:
+            print("This is correct!")
+            canvas.create_text(110, 165, text="You Win!", font="bold Palatino", font_size = 75, color="tomato")
+            return
+    print("Never give up! Please try again.")
+
+def check_answer(user_guess,answer):
+    A=0
+    B=0
+    for i in range(4):
+        if user_guess[i]==answer[i]:
+            A+=1
+        elif user_guess[i] in answer:
+            B+=1
+
+    return A, B
+
+def print_history(canvas, attempts, user_input, A, B):
+    if attempts<10:
+        attempts_x=20
+        attempts_y=attempts*40
+        canvas.create_text(attempts_x,attempts_y,text=f"{user_input} → {A}A{B}B",font="bold Courier New",font_size = 30,color ='indigo')
+   
+            
+    elif 10<=attempts<20:
+        attempts_x=300
+        attempts_y=(attempts-10)*40
+        canvas.create_text(attempts_x,attempts_y,text=f"{user_input} → {A}A{B}B",font="bold Courier New",font_size = 30,color ='indigo')
+      
+
+
+def generate_answer():
+    answer = [] #correct answer is a list
+    digits = list(range(10))  
+    random.shuffle(digits)    
+    for i in range(4):
+        answer.append(str(digits[i])) #correct answer generated
+    return answer
+
+if __name__ == '__main__':
+    main()
