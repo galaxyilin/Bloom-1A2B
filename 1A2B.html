@@ -94,7 +94,7 @@
       if (A === 4) {
         document.getElementById('result').textContent = "🎉 You Win!";
       } else if (attempts >= 20) {
-        document.getElementById('result').textContent = "💡 Never give up! Try again.";
+        document.getElementById('result').textContent = "💡 Never give up! Try again.The correct answer was ${answer.join('')}";
       }
 
       document.getElementById('guessInput').value = '';
